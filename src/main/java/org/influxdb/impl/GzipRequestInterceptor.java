@@ -44,7 +44,8 @@ final class GzipRequestInterceptor implements Interceptor {
 
         Request originalRequest = chain.request();
         RequestBody body = originalRequest.body();
-        if (body == null || originalRequest.header("Content-Encoding") != null) {
+        if (body == null || originalRequest.header("Content-Encoding") != null
+                || "/query".equals(originalRequest.url().uri().getPath())) {
             return chain.proceed(originalRequest);
         }
 

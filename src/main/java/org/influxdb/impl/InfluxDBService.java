@@ -6,6 +6,8 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -43,21 +45,24 @@ interface InfluxDBService {
 
   @GET("/query")
   public Call<QueryResult> query(@Query(U) String username, @Query(P) String password, @Query(DB) String db,
-      @Query(EPOCH) String epoch, @Query(Q) String query);
+      @Query(EPOCH) String epoch, @Query(value = Q, encoded = true) String query);
 
   @GET("/query")
   public Call<QueryResult> query(@Query(U) String username, @Query(P) String password, @Query(DB) String db,
-      @Query(Q) String query);
+      @Query(value = Q, encoded = true) String query);
 
   @POST("/query")
-  public Call<QueryResult> postQuery(@Query(U) String username, @Query(P) String password, @Query(DB) String db,
-      @Query(Q) String query);
+  @FormUrlEncoded
+  public Call<QueryResult> postQuery(@Field(U) String username, @Field(P) String password, @Field(DB) String db,
+      @Field(Q) String query);
 
   @GET("/query")
-  public Call<QueryResult> query(@Query(U) String username, @Query(P) String password, @Query(Q) String query);
+  public Call<QueryResult> query(@Query(U) String username, @Query(P) String password,
+      @Query(value = Q, encoded = true) String query);
 
   @POST("/query")
-  public Call<QueryResult> postQuery(@Query(U) String username,
-      @Query(P) String password, @Query(Q) String query);
+  @FormUrlEncoded
+  public Call<QueryResult> postQuery(@Field(U) String username,
+      @Field(P) String password, @Field(Q) String query);
 
 }

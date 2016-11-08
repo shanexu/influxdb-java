@@ -6,6 +6,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import com.google.common.net.UrlEscapers;
 import org.influxdb.InfluxDB;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
@@ -301,8 +302,9 @@ public class InfluxDBImpl implements InfluxDB {
       call = this.influxDBService.postQuery(this.username,
                                             this.password, query.getDatabase(), query.getCommand());
     } else {
+      String encodedCommand = UrlEscapers.urlFormParameterEscaper().escape(query.getCommand());
       call = this.influxDBService.query(this.username,
-                                        this.password, query.getDatabase(), query.getCommand());
+                                        this.password, query.getDatabase(), encodedCommand);
     }
     return execute(call);
   }

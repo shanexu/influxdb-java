@@ -99,6 +99,24 @@ public class InfluxDBTest {
 		this.influxDB.query(new Query("DROP DATABASE mydb2", "mydb"));
 	}
 
+	@Test
+	public void testMultipleQuery() {
+		String dbName = "unittest_" + System.currentTimeMillis();
+		this.influxDB.createDatabase(dbName);
+		QueryResult result = this.influxDB.query(new Query("SELECT * FROM not_exists;SELECT * FROM not_exists", dbName));
+		Assert.assertEquals(2, result.getResults().size());
+		this.influxDB.deleteDatabase(dbName);
+	}
+
+	@Test
+	public void testPostQuery() {
+		String dbName = "unittest_" + System.currentTimeMillis();
+		this.influxDB.createDatabase(dbName);
+		QueryResult result = this.influxDB.query(new Query("SELECT * FROM not_exists;SELECT * FROM not_exists", dbName, false));
+		Assert.assertEquals(2, result.getResults().size());
+		this.influxDB.deleteDatabase(dbName);
+	}
+
 	/**
 	 * Test that describe Databases works.
 	 */
